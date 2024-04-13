@@ -15,9 +15,9 @@ func fixGumroad(c *config.Config, f *functions) {
 		gummiSay("You will have to help me with that. Find the management page of your router and set up a port forward rule.")
 		gummiSay(fmt.Sprintf("The rule needs to redirect port %s from outside, to your computer's ip on the same port.", c.GumroadConfig.ServerPort))
 		gummiSay(fmt.Sprintf("You should also check the firewall settings on your computer. The public internet needs to access me."))
-		gummiSay("You can enter anything when you're done.")
+		gummiSay("Let me know when I can continue")
 		prompt()
-		testSammi(c, f)
+		testGumroad(c, f)
 	}
 
 	for !f.gumroadToken {

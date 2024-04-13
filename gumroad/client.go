@@ -28,6 +28,7 @@ func (c *Client) Subscribe() (chan Sale, chan error) {
 	e := make(chan error)
 	go func() {
 		e <- c.setup(p)
+		close(e)
 	}()
 	return p, e
 }
@@ -87,7 +88,7 @@ func (c *Client) deleteSubscription(s Subscription) error {
 func (c *Client) subscribe() error {
 	v := url.Values{}
 	v.Set("resource_name", "sale")
-	v.Set("post_url", fmt.Sprintf("http://%s%s%s", c.ip, c.port, listenUrl))
+	v.Set("post_url", fmt.Sprintf("http://%s:%s%s", c.ip, c.port, listenUrl))
 
 	resp, err := c.doRequest(v, http.MethodPut, "https://api.gumroad.com/v2/resource_subscriptions")
 	if err != nil {

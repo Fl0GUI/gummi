@@ -14,8 +14,6 @@ func (c *Client) setup(out chan Sale) error {
 		log.Printf("I could not check my old subscriptions: %s\n", err)
 	}
 
-	fmt.Printf("%+v\n", subscriptions)
-
 	// delete old subscriptions
 	for _, subscription := range subscriptions.Subscriptions {
 		err = c.deleteSubscription(subscription)

@@ -19,7 +19,6 @@ type saleHandler struct {
 
 func (h *saleHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
-	log.Println("A sale!!")
 	err := r.ParseForm()
 	if err != nil {
 		log.Printf("Got a sale but could not parse the data: %s\n", err)

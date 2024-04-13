@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"log"
 	"net/http"
 	"strings"
@@ -21,18 +22,23 @@ func runServer() {
 
 	log.Println("Starting gumroad client")
 	gumroadC := gumroad.NewClient(c)
-	salesChan := make(chan gumroad.Sale, 10)
+	salesChan, gumroadErr := gumroadC.Subscribe()
 	go func() {
-		log.Println("Starting gumroad notification server")
-		if err := gumroadC.Listen(salesChan).ListenAndServe(); !errors.Is(err, http.ErrServerClosed) {
-			close(salesChan)
-			panic(err)
+		for err := range gumroadErr {
+			if !errors.Is(err, http.ErrServerClosed) {
+				fmt.Printf("Gumroad setup error: %s\n", err)
+			}
 		}
 	}()
 
 	log.Println("Forwarding sales")
 	for sale := range salesChan {
-		pushSale(sammiC, sale)
+		err := pushSale(sammiC, sale)
+		if err != nil {
+			log.Printf("Error when forwarding sale: %s\n", err)
+		} else {
+			log.Println("Forwarded a sale!")
+		}
 	}
 }
 

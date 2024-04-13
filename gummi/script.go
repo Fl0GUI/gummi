@@ -38,15 +38,16 @@ func printSucceeded() {
 	gummiSay("I will save these configs for next time.")
 	gummiSaySlow(".....")
 	fmt.Print(gummiSad)
-	gummiSay("That does mean I will not be around next time, but if you ever want to work together again you can delete my configuration file.")
+	gummiSay("That does mean I will not be around next time.")
+	gummiSay("But if you ever want to work together again you can delete my configuration file.")
 	fmt.Print(gummiSmile)
 	gummiSay("With that said, I will be shutting down now. I wish you the best of luck and goodbye.")
 	if !debug {
-		time.Sleep(time.Millisecond * 500)
+		time.Sleep(time.Millisecond * 1000)
 	}
 	fmt.Print(gummiClose)
 	if !debug {
-		time.Sleep(time.Millisecond * 500)
+		time.Sleep(time.Millisecond * 1000)
 	}
 }
 
