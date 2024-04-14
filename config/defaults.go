@@ -1,6 +1,7 @@
 package config
 
-var defaultGumroadPort = "6541"
+var defaultServerPort = "6541"
+var defaultBufferSize = 10
 
 var defaultSammiHost = "localhost"
 var defaultSammiPort = "9450"

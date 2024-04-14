@@ -18,19 +18,9 @@ type Client struct {
 	port        string
 }
 
-func NewClient(c *config.Config) *Client {
-	conf := c.GumroadConfig
-	return &Client{conf.AccessToken, conf.PublicIp, conf.ServerPort}
-}
-
-func (c *Client) Subscribe() (chan Sale, chan error) {
-	p := make(chan Sale, 10)
-	e := make(chan error)
-	go func() {
-		e <- c.setup(p)
-		close(e)
-	}()
-	return p, e
+func NewClient() *Client {
+	conf := config.Config.GumroadConfig
+	return &Client{conf.AccessToken, config.Config.Advanced.ServerConfig.PublicIp, config.Config.Advanced.ServerConfig.ServerPort}
 }
 
 func (c *Client) GetProducts() (*Products, error) {
@@ -42,6 +32,9 @@ func (c *Client) GetProducts() (*Products, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != 200 {
+		if resp.StatusCode == 401 {
+			return nil, Unauthorized
+		}
 		return nil, fmt.Errorf("Could not get products because of an invalid request: %s", resp.Status)
 	}
 

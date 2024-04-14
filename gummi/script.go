@@ -4,9 +4,11 @@ import (
 	"fmt"
 	"log"
 	"time"
+
+	"j322.ica/gumroad-sammi/validate"
 )
 
-var debug = false
+var debug = true
 
 var userName string
 
@@ -51,20 +53,34 @@ func printSucceeded() {
 	}
 }
 
-func printIssue(f *functions) {
-	if f.valid() {
+func printFailure() {
+	if !debug {
+		time.Sleep(time.Millisecond * 200)
+	}
+	fmt.Print(gummiSquint)
+	if !debug {
+		time.Sleep(time.Millisecond * 200)
+	}
+	gummiSay("That didn't seem to work, let's try again!")
+	if !debug {
+		time.Sleep(time.Millisecond * 200)
+	}
+}
+
+func printIssue(f *validate.Functions) {
+	if f.Valid() {
 		return
 	}
 
 	fmt.Print(gummiSquint)
 	gummiSay("I did my best to set things up automatically, but I encountered some issues.")
-	if !f.validSammi() {
-		gummiSay("I could not connect to your sammi button.")
+	if f.Sammi != nil {
+		gummiSay("I could not connect to sammi.")
 	}
-	if !f.validGumroad() {
+	if f.Gumroad != nil {
 		gummiSay("I could not set up my gumroad connection.")
 	}
-	if !f.validSammi() && !f.validGumroad() {
+	if f.Sammi != nil && f.Gumroad != nil {
 		gummiSay("Lets look at the sammi connection first.")
 	}
 }

@@ -1,33 +1,38 @@
 package gumroad
 
 import (
-	"fmt"
+	_ "embed"
 	"log"
+	"net/http"
+
+	"j322.ica/gumroad-sammi/config"
 )
 
-func (c *Client) setup(out chan Sale) error {
-	// see if gumroad exists
+var listenUrl = "/gumroad"
 
-	// check subscriptions
-	subscriptions, err := c.getSubscriptions()
+var handler SaleHandler
+
+type SaleHandler struct {
+	saleChan chan Sale
+}
+
+func (h *SaleHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+	err := r.ParseForm()
 	if err != nil {
-		log.Printf("I could not check my old subscriptions: %s\n", err)
+		log.Printf("Got a sale but could not parse the data: %s\n", err)
+		return
 	}
 
-	// delete old subscriptions
-	for _, subscription := range subscriptions.Subscriptions {
-		err = c.deleteSubscription(subscription)
-		if err != nil {
-			fmt.Printf("I could not delete subcription with id %s: %s\n", subscription.Id, err)
-		}
-	}
+	h.saleChan <- Sale(r.Form)
+}
 
-	// make subscription
-	err = c.subscribe()
-	if err != nil {
-		return fmt.Errorf("I could not make a new subscription: %w", err)
-	}
+func Handle(c *config.Advanced, m *http.ServeMux) {
+	out := make(chan Sale, c.BufferSize)
+	handler := &SaleHandler{out}
+	m.Handle(listenUrl, handler)
+}
 
-	// listen
-	return c.Listen(out).ListenAndServe()
+func GetChannel() chan Sale {
+	return handler.saleChan
 }

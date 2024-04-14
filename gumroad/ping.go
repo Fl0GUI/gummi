@@ -16,11 +16,11 @@ func (c *Client) Ping() error {
 	}
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		return err
+		return SelfTestFailed{urlString}
 	}
 
 	if resp.StatusCode != 200 {
-		return fmt.Errorf("I could not ping my own server over on %s", urlString)
+		return SelfTestFailed{urlString}
 	}
 	return nil
 }

@@ -10,6 +10,8 @@ import (
 	"j322.ica/gumroad-sammi/ipify"
 )
 
+var Config *Configuration
+
 var configFile = "gummi.config.json"
 
 func PathToFile() (string, error) {
@@ -34,7 +36,7 @@ func FileExists() bool {
 	return ok
 }
 
-func (c *Config) Save() error {
+func (c *Configuration) Save() error {
 	p, err := PathToFile()
 	if err != nil {
 		return fmt.Errorf("I could not get the config file for saving: %w", err)
@@ -52,43 +54,53 @@ func (c *Config) Save() error {
 	return nil
 }
 
-func Load() (*Config, error) {
-	res := &Config{}
+func load() error {
+	Config = &Configuration{Advanced{}, SammiConfig{}, GumroadConfig{}, FourthWallConfig{}, StreamElementsConfig{}}
 	p, err := PathToFile()
 	if err != nil {
-		return res, fmt.Errorf("I could not get the config file for reading: %w", err)
+		return fmt.Errorf("I could not get the config file for reading: %w", err)
 	}
 	file, err := os.Open(p)
 	if err != nil {
-		return res, fmt.Errorf("I could not open the config file for reading: %w", err)
+		return fmt.Errorf("I could not open the config file for reading: %w", err)
 	}
 	defer file.Close()
 
-	err = json.NewDecoder(file).Decode(res)
+	err = json.NewDecoder(file).Decode(Config)
 	if err != nil {
-		return res, fmt.Errorf("I could not parse the config file: %w", err)
+		return fmt.Errorf("I could not parse the config file: %w", err)
 	}
 	log.Printf("Loaded config from %s", p)
-	return res, nil
+	return nil
 }
 
-func NewConfig() *Config {
-	res := &Config{}
-	if res.SammiConfig.Host == "" {
-		res.SammiConfig.Host = defaultSammiHost
+func NewConfig() {
+	err := load()
+	if err != nil {
+		log.Printf("Could not create config based on file: %s. Reverting to default configuration.\n", err)
 	}
-	if res.SammiConfig.Port == "" {
-		res.SammiConfig.Port = defaultSammiPort
+
+	adv := &Config.Advanced
+
+	if Config.SammiConfig.Host == "" {
+		Config.SammiConfig.Host = defaultSammiHost
 	}
-	if res.GumroadConfig.ServerPort == "" {
-		res.GumroadConfig.ServerPort = defaultGumroadPort
+
+	if Config.SammiConfig.Port == "" {
+		Config.SammiConfig.Port = defaultSammiPort
 	}
-	if res.GumroadConfig.PublicIp == "" {
+
+	if adv.ServerConfig.ServerPort == "" {
+		adv.ServerConfig.ServerPort = defaultServerPort
+	}
+	if adv.ServerConfig.PublicIp == "" {
 		ip, err := ipify.Get()
 		if err != nil {
 			panic(err)
 		}
-		res.GumroadConfig.PublicIp = ip
+		adv.ServerConfig.PublicIp = ip
 	}
-	return res
+	if adv.BufferSize == 0 {
+		adv.BufferSize = defaultBufferSize
+	}
 }

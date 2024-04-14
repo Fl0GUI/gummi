@@ -4,7 +4,9 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
+	"net/url"
 
 	"j322.ica/gumroad-sammi/config"
 )
@@ -12,61 +14,38 @@ import (
 type Client struct {
 	api      string
 	password string
-	buttonId string
 }
 
-func NewClient(c *config.Config) *Client {
-	conf := c.SammiConfig
+func NewClient(c *config.SammiConfig) *Client {
 	return &Client{
-		fmt.Sprintf("http://%s:%s/api", conf.Host, conf.Port),
-		conf.Password,
-		conf.ButtonId,
+		fmt.Sprintf("http://%s:%s/api", c.Host, c.Port),
+		c.Password,
 	}
 }
 
 func (c *Client) Ping() error {
-	err := c.doRequest(
-		[]byte(fmt.Sprintf(`{"request": "releaseButton","buttonID": "%s"}`, c.buttonId)),
-	)
+	query := url.Values{}
+	query.Add("request", "getVariable")
+	query.Add("name", "api_server_opened")
+	data, err := c.doGetRequest(query.Encode())
 	if err != nil {
-		return fmt.Errorf("Could not release the button: %w", err)
+		return err
 	}
-	return nil
+	res := Response{}
+	err = json.NewDecoder(data).Decode(&res)
+	if err != nil {
+		return err
+	}
+	return res.Err()
 }
 
-func (c *Client) PushButton() error {
-	req := ButtonTrigger{
-		"triggerButton",
-		c.buttonId,
-	}
-	data, err := json.Marshal(req)
-	if err != nil {
-		return fmt.Errorf("I could not create a sammi button trigger request: %w", err)
-	}
-
-	err = c.doRequest(data)
-
-	if err != nil {
-		return fmt.Errorf("I could not make a sammi button trigger request: %w", err)
-	}
-	return nil
-}
-
-func (c *Client) SetVariable(varName string, value any) error {
-	req := NewSetVariable(varName, value, c.buttonId)
-	data, err := json.Marshal(req)
-	if err != nil {
-		return fmt.Errorf("I could not set variable %s.%s to %s: %w", c.buttonId, varName, value, err)
-	}
-	return c.doRequest(data)
-}
-
-func (c *Client) doRequest(data []byte) error {
+func (c *Client) doPostRequest(data []byte) error {
 	req, err := http.NewRequest(http.MethodPost, c.api, bytes.NewReader(data))
-	req.Header["Authorization"] = []string{c.password}
 	if err != nil {
 		return fmt.Errorf("Invalid request: %w", err)
 	}
+	req.Header["Authorization"] = []string{c.password}
+
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return err
@@ -79,4 +58,24 @@ func (c *Client) doRequest(data []byte) error {
 		return fmt.Errorf("Could not decode response: %w", err)
 	}
 	return res.Err()
+}
+
+func (c *Client) doGetRequest(query string) (io.ReadCloser, error) {
+	url, err := url.Parse(c.api)
+	if err != nil {
+		panic(err)
+	}
+	url.RawQuery = query
+
+	req, err := http.NewRequest(http.MethodGet, url.String(), nil)
+	if err != nil {
+		return nil, fmt.Errorf("Invalid request: %w", err)
+	}
+	req.Header["Authorization"] = []string{c.password}
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, serverError{c.api}
+	}
+	return resp.Body, nil
 }
