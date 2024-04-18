@@ -10,8 +10,9 @@ type Configuration struct {
 
 // Has defaults
 type Advanced struct {
-	ServerConfig ServerConfig
-	BufferSize   int
+	ServerConfig    ServerConfig
+	BufferSize      int
+	BackoffAttempts int
 }
 
 type ServerConfig struct {
@@ -26,16 +27,19 @@ type SammiConfig struct {
 }
 
 type GumroadConfig struct {
+	Active      bool
 	AccessToken string
 	ButtonId    string
 }
 
 type FourthWallConfig struct {
+	Active      bool
 	AccessToken string
 	ButtonId    string
 }
 
 type StreamElementsConfig struct {
+	Active      bool
 	AccessToken string
 	ButtonId    string
 }

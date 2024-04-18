@@ -10,7 +10,7 @@ import (
 	"j322.ica/gumroad-sammi/ipify"
 )
 
-var Config *Configuration
+var config *Configuration
 
 var configFile = "gummi.config.json"
 
@@ -55,7 +55,12 @@ func (c *Configuration) Save() error {
 }
 
 func load() error {
-	Config = &Configuration{Advanced{}, SammiConfig{}, GumroadConfig{}, FourthWallConfig{}, StreamElementsConfig{}}
+	config = &Configuration{Advanced{}, SammiConfig{}, GumroadConfig{}, FourthWallConfig{}, StreamElementsConfig{}}
+
+	config.GumroadConfig.Active = true
+	config.FourthWallConfig.Active = true
+	config.StreamElementsConfig.Active = true
+
 	p, err := PathToFile()
 	if err != nil {
 		return fmt.Errorf("I could not get the config file for reading: %w", err)
@@ -66,7 +71,7 @@ func load() error {
 	}
 	defer file.Close()
 
-	err = json.NewDecoder(file).Decode(Config)
+	err = json.NewDecoder(file).Decode(config)
 	if err != nil {
 		return fmt.Errorf("I could not parse the config file: %w", err)
 	}
@@ -74,20 +79,20 @@ func load() error {
 	return nil
 }
 
-func NewConfig() {
+func NewConfig() *Configuration {
 	err := load()
 	if err != nil {
-		log.Printf("Could not create config based on file: %s. Reverting to default configuration.\n", err)
+		log.Printf("Could not create config based on file: %s. Reverting to default Configuration.\n", err)
 	}
 
-	adv := &Config.Advanced
+	adv := &config.Advanced
 
-	if Config.SammiConfig.Host == "" {
-		Config.SammiConfig.Host = defaultSammiHost
+	if config.SammiConfig.Host == "" {
+		config.SammiConfig.Host = defaultSammiHost
 	}
 
-	if Config.SammiConfig.Port == "" {
-		Config.SammiConfig.Port = defaultSammiPort
+	if config.SammiConfig.Port == "" {
+		config.SammiConfig.Port = defaultSammiPort
 	}
 
 	if adv.ServerConfig.ServerPort == "" {
@@ -103,4 +108,8 @@ func NewConfig() {
 	if adv.BufferSize == 0 {
 		adv.BufferSize = defaultBufferSize
 	}
+	if adv.BackoffAttempts == 0 {
+		adv.BackoffAttempts = defaultBackoffAttempts
+	}
+	return config
 }

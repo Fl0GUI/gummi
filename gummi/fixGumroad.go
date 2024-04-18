@@ -10,10 +10,10 @@ import (
 	"j322.ica/gumroad-sammi/validate"
 )
 
-func fixGumroad(f *validate.Functions) {
-	serverC := &config.Config.Advanced.ServerConfig
-	gumroadC := &config.Config.GumroadConfig
-	f.Gumroad = validate.ValidateGumroad()
+func fixGumroad(f *validate.Functions, config *config.Configuration) {
+	serverC := &config.Advanced.ServerConfig
+	gumroadC := &config.GumroadConfig
+	f.Gumroad = validate.ValidateGumroad(config)
 	for f.Gumroad != nil {
 		if errors.Is(f.Gumroad, sammi.ButtonIdNotFoundError) {
 			fixGumroadButton(f, gumroadC)
@@ -24,7 +24,7 @@ func fixGumroad(f *validate.Functions) {
 		} else {
 			panic(f.Gumroad)
 		}
-		f.Gumroad = validate.ValidateGumroad()
+		f.Gumroad = validate.ValidateGumroad(config)
 		if f.Gumroad == nil {
 			return
 		}

@@ -45,7 +45,7 @@ func (c *ButtonClient) Ping() error {
 	return nil
 }
 
-func (c *ButtonClient) SetVariable(varName string, value any) error {
+func (c *ButtonClient) SetVariable(varName string, value map[string]interface{}) error {
 	req := NewSetVariable(varName, value, c.buttonId)
 	data, err := json.Marshal(req)
 	if err != nil {

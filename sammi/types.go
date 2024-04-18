@@ -12,13 +12,13 @@ type ButtonTrigger struct {
 }
 
 type SetVariable struct {
-	Request  string `json:"request"`
-	Name     string `json:"name"`
-	Value    any    `json:"value"`
-	ButtonId string `json:"buttonID"`
+	Request  string                 `json:"request"`
+	Name     string                 `json:"name"`
+	Value    map[string]interface{} `json:"value"`
+	ButtonId string                 `json:"buttonID"`
 }
 
-func NewSetVariable(name string, value any, buttonId string) SetVariable {
+func NewSetVariable(name string, value map[string]interface{}, buttonId string) SetVariable {
 	return SetVariable{
 		"setVariable",
 		name,

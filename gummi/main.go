@@ -15,25 +15,34 @@ func Setup() {
 	setupUserInput()
 }
 
-func Intro(f *validate.Functions) {
+func Intro(f *validate.Functions, config *config.Configuration) {
 	printHello()
+	printOptions(config)
+	validate.UpdateValidation(f, config)
 	printIssue(f)
 }
 
-func Fix(f *validate.Functions) {
+func Fix(f *validate.Functions, config *config.Configuration) {
 	if f.Sammi != nil {
-		fixSammi(f)
+		fixSammi(f, config)
 	}
-	config.Config.Save()
+	config.Save()
+
 	if f.Gumroad != nil {
-		fixGumroad(f)
+		fixGumroad(f, config)
 	}
-	config.Config.Save()
+	config.Save()
+
+	if f.FourthWall != nil {
+		fixFourthWall(f, config)
+	}
+	config.Save()
+
 	if f.Valid() {
 		printSucceeded()
 	}
 
-	err := config.Config.Save()
+	err := config.Save()
 	if err != nil {
 		fmt.Println(err)
 	}

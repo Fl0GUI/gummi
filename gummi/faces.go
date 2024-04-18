@@ -5,6 +5,9 @@ import _ "embed"
 //go:embed smile.gummi
 var gummiSmile string
 
+//go:embed wink.gummi
+var gummiWink string
+
 //go:embed squint.gummi
 var gummiSquint string
 

@@ -37,12 +37,3 @@ func gummiSay(t string) {
 func gummiSaySlow(t string) {
 	gummiSayTalk(t, time.Millisecond*500, time.Second)
 }
-
-func prompt() string {
-	fmt.Printf("%s> ", userName)
-	if !userInput.Scan() {
-		fmt.Println()
-		fmt.Println("Shutting down.")
-	}
-	return userInput.Text()
-}

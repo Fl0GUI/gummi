@@ -3,34 +3,32 @@ package validate
 import (
 	"j322.ica/gumroad-sammi/config"
 	"j322.ica/gumroad-sammi/gumroad"
-	"j322.ica/gumroad-sammi/sammi"
 )
 
-func ValidateGumroad() error {
-	if err := validateServer(); err != nil {
+func ValidateGumroad(c *config.Configuration) error {
+	if !c.GumroadConfig.Active {
+		return nil
+	}
+
+	if err := validateServer(c); err != nil {
 		return err
 	}
-	if err := validateButton(); err != nil {
+	if err := validateButton(c, c.GumroadConfig.ButtonId); err != nil {
 		return err
 	}
-	if err := validateAccess(); err != nil {
+	if err := validateAccess(c); err != nil {
 		return err
 	}
 	return nil
 }
 
-func validateServer() error {
-	c := gumroad.NewClient()
+func validateServer(config *config.Configuration) error {
+	c := gumroad.NewClient(config)
 	return c.Ping()
 }
 
-func validateAccess() error {
-	c := gumroad.NewClient()
+func validateAccess(config *config.Configuration) error {
+	c := gumroad.NewClient(config)
 	_, err := c.GetProducts()
 	return err
-}
-
-func validateButton() error {
-	bc := sammi.NewButtonClient(&config.Config.SammiConfig, config.Config.GumroadConfig.ButtonId)
-	return bc.Ping()
 }

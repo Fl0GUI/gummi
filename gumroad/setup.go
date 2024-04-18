@@ -20,7 +20,7 @@ func (h *SaleHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	err := r.ParseForm()
 	if err != nil {
-		log.Printf("Got a sale but could not parse the data: %s\n", err)
+		log.Printf("Got a sale from Gumroad but could not parse the data: %s\n", err)
 		return
 	}
 
@@ -29,8 +29,8 @@ func (h *SaleHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 func Handle(c *config.Advanced, m *http.ServeMux) {
 	out := make(chan Sale, c.BufferSize)
-	handler := &SaleHandler{out}
-	m.Handle(listenUrl, handler)
+	handler = SaleHandler{out}
+	m.Handle(listenUrl, &handler)
 }
 
 func GetChannel() chan Sale {

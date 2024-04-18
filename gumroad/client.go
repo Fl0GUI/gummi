@@ -18,9 +18,9 @@ type Client struct {
 	port        string
 }
 
-func NewClient() *Client {
-	conf := config.Config.GumroadConfig
-	return &Client{conf.AccessToken, config.Config.Advanced.ServerConfig.PublicIp, config.Config.Advanced.ServerConfig.ServerPort}
+func NewClient(config *config.Configuration) *Client {
+	conf := config.GumroadConfig
+	return &Client{conf.AccessToken, config.Advanced.ServerConfig.PublicIp, config.Advanced.ServerConfig.ServerPort}
 }
 
 func (c *Client) GetProducts() (*Products, error) {

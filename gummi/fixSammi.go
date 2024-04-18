@@ -10,8 +10,8 @@ import (
 	"j322.ica/gumroad-sammi/validate"
 )
 
-func fixSammi(f *validate.Functions) {
-	c := &config.Config.SammiConfig
+func fixSammi(f *validate.Functions, config *config.Configuration) {
+	c := &config.SammiConfig
 	for {
 		if errors.Is(f.Sammi, sammi.ServerError) {
 			fixSammiConnection(f, c)
@@ -21,7 +21,7 @@ func fixSammi(f *validate.Functions) {
 			panic(f.Sammi)
 		}
 
-		f.Sammi = validate.ValidateSammi()
+		f.Sammi = validate.ValidateSammi(config)
 		if f.Sammi == nil {
 			return
 		}

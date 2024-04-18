@@ -1,33 +1,38 @@
 package main
 
 import (
+	"fmt"
+
 	"j322.ica/gumroad-sammi/config"
+	"j322.ica/gumroad-sammi/connect"
 	"j322.ica/gumroad-sammi/gummi"
 	"j322.ica/gumroad-sammi/validate"
 )
 
 func main() {
 	// load config and set defaults
-	config.NewConfig()
-	if err := config.Config.Save(); err != nil {
+	c := config.NewConfig()
+	if err := c.Save(); err != nil {
 		panic(err)
 	}
 
-	setup()
+	setup(c)
 
 	// validate loaded config
-	funcs := validate.Validate()
+	funcs := validate.Validate(c)
 	if !funcs.Valid() {
-		gummi.Intro(&funcs)
+		//gummi.Intro(&funcs, c)
+		fmt.Printf("Invalid setup: %s\n", funcs)
+		return
 	}
 	for !funcs.Valid() {
-		gummi.Fix(&funcs)
-		funcs = validate.Validate()
+		gummi.Fix(&funcs, c)
+		funcs = validate.Validate(c)
 	}
-	return
+	c.Save()
 
-	// use config to set up
-	setup()
+	// connect stores to sammi
+	connect.Connect(c)
 
 	// wait for close?
 	<-make(chan struct{})

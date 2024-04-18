@@ -5,7 +5,7 @@ import (
 	"j322.ica/gumroad-sammi/sammi"
 )
 
-func ValidateSammi() error {
-	testClient := sammi.NewClient(&config.Config.SammiConfig)
+func ValidateSammi(config *config.Configuration) error {
+	testClient := sammi.NewClient(&config.SammiConfig)
 	return testClient.Ping()
 }
