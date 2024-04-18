@@ -1,11 +1,14 @@
 package main
 
 import (
-	"fmt"
+	"os"
+	"os/signal"
 
 	"j322.ica/gumroad-sammi/config"
 	"j322.ica/gumroad-sammi/connect"
+	"j322.ica/gumroad-sammi/fourthwall"
 	"j322.ica/gumroad-sammi/gummi"
+	"j322.ica/gumroad-sammi/gumroad"
 	"j322.ica/gumroad-sammi/validate"
 )
 
@@ -21,9 +24,7 @@ func main() {
 	// validate loaded config
 	funcs := validate.Validate(c)
 	if !funcs.Valid() {
-		//gummi.Intro(&funcs, c)
-		fmt.Printf("Invalid setup: %s\n", funcs)
-		return
+		gummi.Intro(&funcs, c)
 	}
 	for !funcs.Valid() {
 		gummi.Fix(&funcs, c)
@@ -31,9 +32,15 @@ func main() {
 	}
 	c.Save()
 
+	// wait for close?
+	signals := make(chan os.Signal)
+	signal.Notify(signals, os.Interrupt)
+	go func() {
+		<-signals
+		close(gumroad.GetChannel())
+		close(fourthwall.GetSalesChan())
+	}()
+
 	// connect stores to sammi
 	connect.Connect(c)
-
-	// wait for close?
-	<-make(chan struct{})
 }

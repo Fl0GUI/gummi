@@ -47,6 +47,10 @@ func (c *Client) GetProducts() (*Products, error) {
 	return res, nil
 }
 
+func (c *Client) subscriptionURL() string {
+	return fmt.Sprintf("http://%s:%s%s", c.ip, c.port, listenUrl)
+}
+
 func (c *Client) getSubscriptions() (SubscriptionsResponse, error) {
 	v := url.Values{}
 	v.Set("resource_name", "sale")
@@ -81,7 +85,7 @@ func (c *Client) deleteSubscription(s Subscription) error {
 func (c *Client) subscribe() error {
 	v := url.Values{}
 	v.Set("resource_name", "sale")
-	v.Set("post_url", fmt.Sprintf("http://%s:%s%s", c.ip, c.port, listenUrl))
+	v.Set("post_url", c.subscriptionURL())
 
 	resp, err := c.doRequest(v, http.MethodPut, "https://api.gumroad.com/v2/resource_subscriptions")
 	if err != nil {

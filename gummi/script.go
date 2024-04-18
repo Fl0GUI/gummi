@@ -8,16 +8,16 @@ import (
 	"j322.ica/gumroad-sammi/validate"
 )
 
-var debug = true
+var debug = false
 
 var userName string
 
 func printHello() {
-	log.Println("first time setup")
+	log.Println("First time setup")
 	if !debug {
 		time.Sleep(time.Second)
 	}
-	fmt.Print("Starting Gummi assistant")
+	fmt.Print("Gummi assistant: starting")
 	if !debug {
 		time.Sleep(time.Second)
 	}
@@ -61,7 +61,7 @@ func printFailure() {
 	if !debug {
 		time.Sleep(time.Millisecond * 200)
 	}
-	gummiSay("That didn't seem to work, let's try again!")
+	gummiSay("There still seems to be a problem, let's keep going.")
 	if !debug {
 		time.Sleep(time.Millisecond * 200)
 	}

@@ -25,13 +25,13 @@ func PathToFile() (string, error) {
 func FileExists() bool {
 	p, err := PathToFile()
 	if err != nil {
-		log.Printf("I could get the config file path: %s\n", err)
+		log.Printf("Config file path error: %s\n", err)
 		return false
 	}
 	_, err = os.Stat(p)
 	ok := err == nil
 	if !ok {
-		log.Printf("I could not check the config file: %s\n", err)
+		log.Printf("Config file read error: %s\n", err)
 	}
 	return ok
 }
@@ -39,17 +39,17 @@ func FileExists() bool {
 func (c *Configuration) Save() error {
 	p, err := PathToFile()
 	if err != nil {
-		return fmt.Errorf("I could not get the config file for saving: %w", err)
+		return fmt.Errorf("Config file save: %w", err)
 	}
 	file, err := os.Create(p)
 	if err != nil {
-		return fmt.Errorf("I could not open the config file for saving: %w", err)
+		return fmt.Errorf("Config file save: create failure: %w", err)
 	}
 	defer file.Close()
 
 	err = json.NewEncoder(file).Encode(&c)
 	if err != nil {
-		return fmt.Errorf("I could not save the config file: %w\n", err)
+		return fmt.Errorf("Config file save: write failure: %w\n", err)
 	}
 	return nil
 }
@@ -63,26 +63,26 @@ func load() error {
 
 	p, err := PathToFile()
 	if err != nil {
-		return fmt.Errorf("I could not get the config file for reading: %w", err)
+		return fmt.Errorf("Config file load: %w", err)
 	}
 	file, err := os.Open(p)
 	if err != nil {
-		return fmt.Errorf("I could not open the config file for reading: %w", err)
+		return fmt.Errorf("Config file load: open failure: %w", err)
 	}
 	defer file.Close()
 
 	err = json.NewDecoder(file).Decode(config)
 	if err != nil {
-		return fmt.Errorf("I could not parse the config file: %w", err)
+		return fmt.Errorf("Config file load: read failure: %w", err)
 	}
-	log.Printf("Loaded config from %s", p)
+	log.Printf("Config file load: succes. path=%s", p)
 	return nil
 }
 
 func NewConfig() *Configuration {
 	err := load()
 	if err != nil {
-		log.Printf("Could not create config based on file: %s. Reverting to default Configuration.\n", err)
+		log.Printf("Config initialization failure: %s. Reverting to default Configuration.\n", err)
 	}
 
 	adv := &config.Advanced
