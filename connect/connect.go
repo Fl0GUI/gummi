@@ -16,14 +16,18 @@ func Connect(config *config.Configuration) {
 	if config.GumroadConfig.Active {
 		wg.Add(1)
 		go func() {
+			log.Println("Gumroad: starting")
 			connectGumroad(config, config.GumroadConfig.ButtonId)
 			wg.Done()
 		}()
 	}
 	if config.FourthWallConfig.Active {
 		wg.Add(1)
-		go connectFourthwall(config, config.FourthWallConfig.ButtonId)
-		wg.Done()
+		go func() {
+			log.Println("Fourthwall: starting")
+			connectFourthwall(config, config.FourthWallConfig.ButtonId)
+			wg.Done()
+		}()
 	}
 	wg.Wait()
 }
@@ -58,6 +62,7 @@ func connectFourthwall(c *config.Configuration, buttonId string) {
 	sammiC := &c.SammiConfig
 	bc := sammi.NewButtonClient(sammiC, buttonId)
 	sales := fourthwall.GetSalesChan()
+	fourthwall.SetSecretKey([]byte(c.FourthWallConfig.AccessToken))
 
 	for sale := range sales {
 		err := sendSale(bc, sale, c)
