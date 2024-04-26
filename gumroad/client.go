@@ -13,14 +13,15 @@ import (
 )
 
 type Client struct {
-	accessToken string
-	ip          string
-	port        string
+	accessToken  string
+	ip           string
+	port         string
+	subscription string
 }
 
 func NewClient(config *config.Configuration) *Client {
 	conf := config.GumroadConfig
-	return &Client{conf.AccessToken, config.Advanced.ServerConfig.PublicIp, config.Advanced.ServerConfig.ServerPort}
+	return &Client{conf.AccessToken, config.Advanced.ServerConfig.PublicIp, config.Advanced.ServerConfig.ServerPort, ""}
 }
 
 func (c *Client) GetProducts() (*Products, error) {
@@ -49,6 +50,10 @@ func (c *Client) GetProducts() (*Products, error) {
 
 func (c *Client) subscriptionURL() string {
 	return fmt.Sprintf("http://%s:%s%s", c.ip, c.port, listenUrl)
+}
+
+func (c *Client) ActiveSubscription() string {
+	return c.subscription
 }
 
 func (c *Client) getSubscriptions() (SubscriptionsResponse, error) {
@@ -92,6 +97,15 @@ func (c *Client) subscribe() error {
 		return err
 	}
 	defer resp.Body.Close()
+	var responseData SubscriptionResponse
+	err = json.NewDecoder(resp.Body).Decode(&responseData)
+	if err != nil {
+		return fmt.Errorf("could not parse subscription request response: %w\n", err)
+	}
+	if !responseData.Success {
+		return errors.New("subscription was not accepted.")
+	}
+	c.subscription = responseData.Subscription.Id
 	return nil
 }
 

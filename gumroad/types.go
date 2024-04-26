@@ -7,6 +7,11 @@ type SubscriptionsResponse struct {
 	Subscriptions []Subscription `json:"resource_subscriptions"`
 }
 
+type SubscriptionResponse struct {
+	Success      bool         `json:"success"`
+	Subscription Subscription `json:"resource_subscription"`
+}
+
 type Subscription struct {
 	Id      string `json:"id"`
 	Name    string `json:"resource_name"`
