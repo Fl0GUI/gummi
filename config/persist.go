@@ -55,11 +55,10 @@ func (c *Configuration) Save() error {
 }
 
 func load() error {
-	config = &Configuration{Advanced{}, SammiConfig{}, GumroadConfig{}, FourthWallConfig{}, StreamElementsConfig{}}
+	config = &Configuration{Advanced{}, SammiConfig{}, GumroadConfig{}, FourthWallConfig{}}
 
 	config.GumroadConfig.Active = true
 	config.FourthWallConfig.Active = true
-	config.StreamElementsConfig.Active = true
 
 	p, err := PathToFile()
 	if err != nil {

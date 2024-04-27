@@ -13,12 +13,14 @@ import (
 
 type Client struct {
 	api      string
+	webhook  string
 	password string
 }
 
 func NewClient(c *config.SammiConfig) *Client {
 	return &Client{
 		fmt.Sprintf("http://%s:%s/api", c.Host, c.Port),
+		fmt.Sprintf("http://%s:%s/webhook", c.Host, c.Port),
 		c.Password,
 	}
 }
@@ -39,8 +41,21 @@ func (c *Client) Ping() error {
 	return res.Err()
 }
 
+func (c *Client) Trigger(trigger string, data map[string]interface{}) error {
+	data["trigger"] = trigger
+	sData, err := json.Marshal(data)
+	if err != nil {
+		return err
+	}
+	return c.doPostRequestTo(sData, c.webhook)
+}
+
 func (c *Client) doPostRequest(data []byte) error {
-	req, err := http.NewRequest(http.MethodPost, c.api, bytes.NewReader(data))
+	return c.doPostRequestTo(data, c.api)
+}
+
+func (c *Client) doPostRequestTo(data []byte, api string) error {
+	req, err := http.NewRequest(http.MethodPost, api, bytes.NewReader(data))
 	if err != nil {
 		return fmt.Errorf("Invalid request: %w", err)
 	}

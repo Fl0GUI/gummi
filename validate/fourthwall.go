@@ -12,17 +12,6 @@ type testMode struct {
 	TestMode bool
 }
 
-func ValidateFourthWall(config *config.Configuration) error {
-	if !config.FourthWallConfig.Active {
-		return nil
-	}
-
-	if err := validateButton(config, config.FourthWallConfig.ButtonId); err != nil {
-		return err
-	}
-	return nil
-}
-
 func ValidateFourthWallHook(config *config.Configuration) error {
 	sales := fourthwall.GetSalesChan()
 

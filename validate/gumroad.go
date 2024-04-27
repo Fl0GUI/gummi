@@ -13,9 +13,6 @@ func ValidateGumroad(c *config.Configuration) error {
 	if err := validateServer(c); err != nil {
 		return err
 	}
-	if err := validateButton(c, c.GumroadConfig.ButtonId); err != nil {
-		return err
-	}
 	if err := validateAccess(c); err != nil {
 		return err
 	}

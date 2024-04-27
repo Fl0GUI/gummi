@@ -33,7 +33,7 @@ func Fix(f *validate.Functions, config *config.Configuration) {
 	}
 	config.Save()
 
-	if f.FourthWall != nil {
+	if config.FourthWallConfig.Active && len(config.FourthWallConfig.AccessToken) == 0 {
 		fixFourthWall(f, config)
 	}
 	config.Save()
