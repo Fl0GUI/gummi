@@ -6,7 +6,6 @@ import (
 
 	"j322.ica/gumroad-sammi/config"
 	"j322.ica/gumroad-sammi/gumroad"
-	"j322.ica/gumroad-sammi/sammi"
 	"j322.ica/gumroad-sammi/validate"
 )
 
@@ -15,9 +14,7 @@ func fixGumroad(f *validate.Functions, config *config.Configuration) {
 	gumroadC := &config.GumroadConfig
 	f.Gumroad = validate.ValidateGumroad(config)
 	for f.Gumroad != nil {
-		if errors.Is(f.Gumroad, sammi.ButtonIdNotFoundError) {
-			fixGumroadButton(f, gumroadC)
-		} else if errors.Is(f.Gumroad, gumroad.Unauthorized) {
+		if errors.Is(f.Gumroad, gumroad.Unauthorized) {
 			fixGumroadToken(f, gumroadC)
 		} else if errors.Is(f.Gumroad, gumroad.SelfTestFailed{}) {
 			fixGumroadServer(f, serverC)
@@ -51,11 +48,4 @@ func fixGumroadToken(f *validate.Functions, gumroadC *config.GumroadConfig) {
 	gummiSay("Just follow those steps and paste the \"Access Token\" here.")
 	gumroadC.AccessToken = prompt()
 
-}
-
-func fixGumroadButton(f *validate.Functions, c *config.GumroadConfig) {
-	fmt.Print(gummiSmile)
-	gummiSay("I need a buttonID to click when you get a gumroad sale.")
-	gummiSay("Can you set one up, and tell me the buttonID please?")
-	c.ButtonId = prompt()
 }

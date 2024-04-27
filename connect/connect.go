@@ -17,7 +17,7 @@ func Connect(config *config.Configuration) {
 		wg.Add(1)
 		go func() {
 			log.Println("Gumroad: starting")
-			connectGumroad(config, config.GumroadConfig.ButtonId)
+			connectGumroad(config)
 			wg.Done()
 		}()
 	}
@@ -25,14 +25,14 @@ func Connect(config *config.Configuration) {
 		wg.Add(1)
 		go func() {
 			log.Println("Fourthwall: starting")
-			connectFourthwall(config, config.FourthWallConfig.ButtonId)
+			connectFourthwall(config)
 			wg.Done()
 		}()
 	}
 	wg.Wait()
 }
 
-func connectGumroad(c *config.Configuration, buttonId string) {
+func connectGumroad(c *config.Configuration) {
 	gc := gumroad.NewClient(c)
 	if err := backoff(gc.Subscribe, c); err != nil {
 		panic(err)
@@ -58,7 +58,7 @@ func connectGumroad(c *config.Configuration, buttonId string) {
 	}
 }
 
-func connectFourthwall(c *config.Configuration, buttonId string) {
+func connectFourthwall(c *config.Configuration) {
 	sammiC := &c.SammiConfig
 	bc := sammi.NewClient(sammiC)
 	sales := fourthwall.GetSalesChan()

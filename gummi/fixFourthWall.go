@@ -1,31 +1,14 @@
 package gummi
 
 import (
-	"errors"
 	"fmt"
 
 	"j322.ica/gumroad-sammi/config"
-	"j322.ica/gumroad-sammi/sammi"
 	"j322.ica/gumroad-sammi/validate"
 )
 
 func fixFourthWall(f *validate.Functions, config *config.Configuration) {
-	fixFourthWallSimple(f, config)
 	fixFourthWallInteractive(f, config)
-}
-
-func fixFourthWallSimple(f *validate.Functions, config *config.Configuration) {
-	fourthWallC := &config.FourthWallConfig
-	for f.FourthWall != nil {
-		if errors.Is(f.FourthWall, sammi.ButtonIdNotFoundError) {
-			fixFourthWallButton(f, fourthWallC)
-		}
-		f.FourthWall = validate.ValidateFourthWall(config)
-		if f.FourthWall == nil {
-			return
-		}
-		printFailure()
-	}
 }
 
 func fixFourthWallInteractive(f *validate.Functions, config *config.Configuration) {
@@ -49,11 +32,4 @@ func fixFourthWallInteractive(f *validate.Functions, config *config.Configuratio
 		}
 		printFailure()
 	}
-}
-
-func fixFourthWallButton(f *validate.Functions, c *config.FourthWallConfig) {
-	fmt.Print(gummiSmile)
-	gummiSay("I need a buttonID to click when you get a fourthwall sale.")
-	gummiSay("Can you set one up, and tell me the buttonID please?")
-	c.ButtonId = prompt()
 }

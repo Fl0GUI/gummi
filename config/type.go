@@ -1,11 +1,10 @@
 package config
 
 type Configuration struct {
-	Advanced             Advanced
-	SammiConfig          SammiConfig
-	GumroadConfig        GumroadConfig
-	FourthWallConfig     FourthWallConfig
-	StreamElementsConfig StreamElementsConfig
+	Advanced         Advanced
+	SammiConfig      SammiConfig
+	GumroadConfig    GumroadConfig
+	FourthWallConfig FourthWallConfig
 }
 
 // Has defaults
@@ -29,17 +28,9 @@ type SammiConfig struct {
 type GumroadConfig struct {
 	Active      bool
 	AccessToken string
-	ButtonId    string
 }
 
 type FourthWallConfig struct {
 	Active      bool
 	AccessToken string
-	ButtonId    string
-}
-
-type StreamElementsConfig struct {
-	Active      bool
-	AccessToken string
-	ButtonId    string
 }
