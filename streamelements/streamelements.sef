@@ -1,0 +1,60 @@
+[extension_name]
+streamelements
+[extension_info]
+Listen to streamelements events
+[extension_version]
+1.0
+[insert_external]
+<h>
+Streamelements Sammi integration by Fl_GUI
+</h>
+<form id="SE_form">
+  <label>Get a JWT from <a target="_blank" href="https://streamelements.com/dashboard/account/channels">Stream elements</a></label>
+  <br>
+  <label>JWT token token:</label>
+  <input type="password" placeholder="jwt" name="jwt" id="SE_jwt">
+  <br>
+  <button>Apply</button>
+</form
+[insert_command]
+document.getElementById("SE_form").onsubmit = onSubmit
+[insert_hook]
+[insert_script]
+let sock
+function onSubmit(e) {
+  e.preventDefault()
+  if (sock) {
+    sock.disconnect()
+  }
+
+  sock = io('https://realtime.streamelements.com', {transports: ['websocket'] });
+
+  sock.on('connect', onConnect)
+  sock.on('disconnect', onDisconnect)
+  sock.on('authenticated', onAuthenticate)
+  sock.on('event', onEvent)
+
+  function onConnect() {
+    console.log("connected to stream elements")
+    authenticate()
+  }
+  function onDisconnect() {
+    console.log("disconnected from stream elements")
+  }
+
+  function authenticate() {
+    const jwt = document.getElementById("SE_jwt").value
+    sock.emit('authenticate', {method: "jwt", token: jwt})
+  }
+  function onAuthenticate(data) {
+    console.log("authenticated to stream elements")
+  }
+
+  function onEvent(event) {
+    console.log(`${event.type} event received from stream elements.`)
+    SAMMI.triggerExt(`streamelements:${event.type}`, event)
+  }
+
+  return false
+}
+[insert_over]
