@@ -39,11 +39,11 @@ func connectGumroad(c *config.Configuration, buttonId string) {
 	} else {
 		log.Println("Gumroad subscription: success")
 	}
-	bc := sammi.NewButtonClient(&c.SammiConfig, buttonId)
+	bc := sammi.NewClient(&c.SammiConfig)
 	sales := gumroad.GetChannel()
 
 	for sale := range sales {
-		err := sendSale(bc, gumroadToVar(sale), c)
+		err := backoff(func() error { return bc.Trigger("gumroad", gumroadToVar(sale)) }, c)
 		log.Println("Gumroad sale: received")
 		if err != nil {
 			log.Printf("Gumroad trigger failure: %s\n", err)
@@ -60,12 +60,15 @@ func connectGumroad(c *config.Configuration, buttonId string) {
 
 func connectFourthwall(c *config.Configuration, buttonId string) {
 	sammiC := &c.SammiConfig
-	bc := sammi.NewButtonClient(sammiC, buttonId)
+	bc := sammi.NewClient(sammiC)
 	sales := fourthwall.GetSalesChan()
 	fourthwall.SetSecretKey([]byte(c.FourthWallConfig.AccessToken))
 
 	for sale := range sales {
-		err := sendSale(bc, sale, c)
+		trigger := fourthWallTriggerName(sale)
+		err := backoff(func() error {
+			return bc.Trigger(trigger, sale)
+		}, c)
 		log.Println("Fourthwall sale: received")
 		if err != nil {
 			log.Printf("Fourthwall trigger failure: %s\n", err)
@@ -75,21 +78,15 @@ func connectFourthwall(c *config.Configuration, buttonId string) {
 	}
 }
 
-func sendSale(bc *sammi.ButtonClient, sale map[string]interface{}, c *config.Configuration) error {
-	sendVar := func() error {
-		return bc.SetVariable("Sale", sale)
+func fourthWallTriggerName(s fourthwall.Sale) string {
+	var eventT string
+	var t interface{}
+	var ok bool
+	if t, ok = s["type"]; ok {
+		eventT, ok = t.(string)
 	}
-	err := backoff(sendVar, c)
-	if err != nil {
-		return fmt.Errorf("Could not send sale: %w", err)
+	if !ok {
+		eventT = "null"
 	}
-
-	activate := func() error {
-		return bc.PushButton()
-	}
-	err = backoff(activate, c)
-	if err != nil {
-		return fmt.Errorf("Could not send sale: %w", err)
-	}
-	return err
+	return fmt.Sprintf("fourthwall:%s", eventT)
 }
