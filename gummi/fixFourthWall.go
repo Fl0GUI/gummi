@@ -8,10 +8,6 @@ import (
 )
 
 func fixFourthWall(f *validate.Functions, config *config.Configuration) {
-	fixFourthWallInteractive(f, config)
-}
-
-func fixFourthWallInteractive(f *validate.Functions, config *config.Configuration) {
 	adv := &config.Advanced.ServerConfig
 	for {
 		fmt.Print(gummiSmile)
