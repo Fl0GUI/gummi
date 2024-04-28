@@ -52,3 +52,11 @@ Yes, you could.
 But I've gone through the trouble of finding out how the services work, made your SAMMI implementations simpler, and made the process a bit fun.
 I also just like writing code ok.
 And I didn't find out you could until this was already working well.
+
+#### donate
+
+I'm not requiring payment nor do I depend on donations.
+Kind words motivate me more than money.
+But if that is you way you show your support you can click on this:
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/N4N2XG5FJ)
