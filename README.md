@@ -13,7 +13,7 @@
 
 \* *there is currently a [SAMMI integration](https://github.com/Fl0GUI/gummi/blob/master/streamelements/streamelements.sef) provided instead*
 
-[Create an issue](https://github.com/Fl0GUI/gummi/issues/new) to request an integration.
+[Create an issue](https://github.com/Fl0GUI/gummi/issues/new?assignees=&labels=integration%2C+request&projects=&template=feature_request.md&title=Integration+request%3A+) to request an integration.
 
 ## How it works
 
