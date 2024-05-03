@@ -8,7 +8,7 @@
 * [x] Gumroad
 * [x] FourthWall+
 * [ ] StreamElements*
-* [ ] Throne
+* [x] Throne
 
 \+ *this integration is implemented with security*
 
