@@ -12,9 +12,9 @@ func fixThrone(f *validate.Functions, c *config.Configuration) {
 	for {
 		fmt.Print(gummiSmile)
 		gummiSay("Time to set up throne!")
-		gummiSay("I'm going to hijack the browser source extension")
+		gummiSay("I'm going to hijack the browser source extension.")
 		gummiSay("Can you set one up at https://throne.com/profile/integrations/browsersource please?")
-		gummiSay("Then copy the url, and give it to me")
+		gummiSay("Then copy the url, and give it to me.")
 		updateCreatorId(f, c)
 		for f.Throne != nil {
 			gummiSay("Oops, that seems incorrect. Can you try again?")
