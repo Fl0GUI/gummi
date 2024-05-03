@@ -5,10 +5,10 @@
 
 ## Support
 
-* [x] Gumroad
-* [x] FourthWall+
-* [ ] StreamElements*
-* [x] Throne
+* [x] Gumroad [![GitHub issues-open](https://badgen.net/github/label-issues/Fl0GUI/gummi/gumroad/open)](https://github.com/Fl0GUI/gummi/issues?q=is%3Aopen%20label%3Agumroad) 
+* [x] FourthWall+ [![GitHub issues-open](https://badgen.net/github/label-issues/Fl0GUI/gummi/fourthwall/open)](https://github.com/Fl0GUI/gummi/issues?q=is%3Aopen%20label%3Afourthwall) 
+* [ ] StreamElements* [![GitHub issues-open](https://badgen.net/github/label-issues/Fl0GUI/gummi/streamelements/open)](https://github.com/Fl0GUI/gummi/issues?q=is%3Aopen%20label%3Astreamelements) 
+* [x] Throne [![GitHub issues-open](https://badgen.net/github/label-issues/Fl0GUI/gummi/throne/open)](https://github.com/Fl0GUI/gummi/issues?q=is%3Aopen%20label%3Athrone)
 
 \+ *this integration is implemented with security*
 
@@ -37,6 +37,8 @@ For gumroad see [the official documentation](https://app.gumroad.com/ping).
 For FourthWall see [the official documentation](https://docs.fourthwall.dev/webhook-event-types/).
 
 For StreamElements see [the official documentation](https://dev.streamelements.com/docs/api-docs/5a84cc101a9c5-connecting-via-websocket-using-o-auth2#json-schema).
+
+For Throne see TODO
 
 The web services have ways to simulate events, which is picked up by Gummi as well.
 Use these to test your SAMMI implementation.
