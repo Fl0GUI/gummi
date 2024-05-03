@@ -5,6 +5,7 @@ type Configuration struct {
 	SammiConfig      SammiConfig
 	GumroadConfig    GumroadConfig
 	FourthWallConfig FourthWallConfig
+	ThroneConfig     ThroneConfig
 }
 
 // Has defaults
@@ -33,4 +34,9 @@ type GumroadConfig struct {
 type FourthWallConfig struct {
 	Active      bool
 	AccessToken string
+}
+
+type ThroneConfig struct {
+	Active    bool
+	CreatorId string
 }
