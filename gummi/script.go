@@ -80,7 +80,11 @@ func printIssue(f *validate.Functions) {
 	if f.Gumroad != nil {
 		gummiSay("I could not set up my gumroad connection.")
 	}
-	if f.Sammi != nil && f.Gumroad != nil {
+	if f.Throne != nil {
+		gummiSay("I could not connect to throne's database.")
+	}
+
+	if f.Sammi != nil && f.Gumroad != nil && f.Throne != nil {
 		gummiSay("Lets look at the sammi connection first.")
 	}
 }

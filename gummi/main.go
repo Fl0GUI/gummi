@@ -38,6 +38,11 @@ func Fix(f *validate.Functions, config *config.Configuration) {
 	}
 	config.Save()
 
+	if config.ThroneConfig.Active && len(config.ThroneConfig.CreatorId) == 0 {
+		fixThrone(f, config)
+	}
+	config.Save()
+
 	if f.Valid() {
 		printSucceeded()
 	}

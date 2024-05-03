@@ -9,6 +9,7 @@ import (
 	"j322.ica/gumroad-sammi/fourthwall"
 	"j322.ica/gumroad-sammi/gummi"
 	"j322.ica/gumroad-sammi/gumroad"
+	"j322.ica/gumroad-sammi/throne"
 	"j322.ica/gumroad-sammi/validate"
 )
 
@@ -39,6 +40,7 @@ func main() {
 		<-signals
 		close(gumroad.GetChannel())
 		close(fourthwall.GetSalesChan())
+		throne.Stop()
 	}()
 
 	// connect stores to sammi
