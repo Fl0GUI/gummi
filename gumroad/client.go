@@ -17,11 +17,12 @@ type Client struct {
 	ip           string
 	port         string
 	subscription string
+	pathSecret   string
 }
 
 func NewClient(config *config.Configuration) *Client {
 	conf := config.GumroadConfig
-	return &Client{conf.AccessToken, config.Advanced.ServerConfig.PublicIp, config.Advanced.ServerConfig.ServerPort, ""}
+	return &Client{conf.AccessToken, config.Advanced.ServerConfig.PublicIp, config.Advanced.ServerConfig.ServerPort, "", pathSecret(&conf)}
 }
 
 func (c *Client) GetProducts() (*Products, error) {
@@ -46,10 +47,6 @@ func (c *Client) GetProducts() (*Products, error) {
 	}
 
 	return res, nil
-}
-
-func (c *Client) subscriptionURL() string {
-	return fmt.Sprintf("http://%s:%s%s", c.ip, c.port, listenUrl)
 }
 
 func (c *Client) ActiveSubscription() string {

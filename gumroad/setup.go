@@ -8,7 +8,7 @@ import (
 	"j322.ica/gumroad-sammi/config"
 )
 
-var listenUrl = "/gumroad"
+var listenUrl = "/gumroad/{pathsecret}"
 
 var handler SaleHandler
 

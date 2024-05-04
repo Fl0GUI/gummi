@@ -6,6 +6,10 @@ import (
 )
 
 func ValidateThrone(c *config.Configuration) error {
+	if !c.ThroneConfig.Active {
+		return nil
+	}
+
 	if err := throne.Start(&c.ThroneConfig); err != nil {
 		return err
 	} else {

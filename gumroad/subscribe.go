@@ -15,7 +15,7 @@ func (c *Client) Unsubscribe() error {
 	// delete old subscriptions
 	errs := make([]error, 0)
 	for _, subscription := range subscriptions.Subscriptions {
-		if subscription.PostUrl == c.subscriptionURL() {
+		if c.isMyUrl(subscription.PostUrl) == nil {
 			err = c.deleteSubscription(subscription)
 			if err != nil {
 				errs = append(errs, fmt.Errorf("Could not delete an old gumroad subscription: %w", err))
