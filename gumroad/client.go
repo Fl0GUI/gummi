@@ -20,9 +20,12 @@ type Client struct {
 	pathSecret   string
 }
 
+var client Client
+
 func NewClient(config *config.Configuration) *Client {
 	conf := config.GumroadConfig
-	return &Client{conf.AccessToken, config.Advanced.ServerConfig.PublicIp, config.Advanced.ServerConfig.ServerPort, "", pathSecret(&conf)}
+	client = Client{conf.AccessToken, config.Advanced.ServerConfig.PublicIp, config.Advanced.ServerConfig.ServerPort, "", pathSecret(&conf)}
+	return &client
 }
 
 func (c *Client) GetProducts() (*Products, error) {

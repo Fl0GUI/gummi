@@ -1,6 +1,6 @@
 module j322.ica/gumroad-sammi
 
-go 1.21.3
+go 1.22.2
 
 require (
 	cloud.google.com/go v0.112.1 // indirect

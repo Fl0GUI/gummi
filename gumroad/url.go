@@ -30,7 +30,7 @@ func (c *Client) isMyUrl(urlString string) error {
 
 func (c *Client) isMyUrlSecret(urlSecret string) error {
 	if urlSecret != c.pathSecret {
-		return fmt.Errorf("url does not match the path secret")
+		return fmt.Errorf("%#v does not match the path secret", urlSecret)
 	}
 	return nil
 }
