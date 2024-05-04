@@ -40,9 +40,11 @@ func Start(c *config.ThroneConfig) error {
 }
 
 func Stop() {
-	client.ctxCancel()
-	client.snapshots.Stop()
-	close(client.sales)
+	if client.sales != nil {
+		client.ctxCancel()
+		client.snapshots.Stop()
+		close(client.sales)
+	}
 }
 
 func GetSalesChan() chan Sale {

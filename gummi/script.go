@@ -8,7 +8,7 @@ import (
 	"j322.ica/gumroad-sammi/validate"
 )
 
-var debug = false
+var debug = true
 
 var userName string
 
