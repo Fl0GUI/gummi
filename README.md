@@ -5,10 +5,10 @@
 
 ## Support
 
-* [x] Gumroad [![GitHub issues-open](https://badgen.net/github/label-issues/Fl0GUI/gummi/gumroad/open)](https://github.com/Fl0GUI/gummi/issues?q=is%3Aopen%20label%3Agumroad) 
+* [x] Gumroad+ [![GitHub issues-open](https://badgen.net/github/label-issues/Fl0GUI/gummi/gumroad/open)](https://github.com/Fl0GUI/gummi/issues?q=is%3Aopen%20label%3Agumroad) 
 * [x] FourthWall+ [![GitHub issues-open](https://badgen.net/github/label-issues/Fl0GUI/gummi/fourthwall/open)](https://github.com/Fl0GUI/gummi/issues?q=is%3Aopen%20label%3Afourthwall) 
-* [ ] StreamElements* [![GitHub issues-open](https://badgen.net/github/label-issues/Fl0GUI/gummi/streamelements/open)](https://github.com/Fl0GUI/gummi/issues?q=is%3Aopen%20label%3Astreamelements) 
-* [x] Throne [![GitHub issues-open](https://badgen.net/github/label-issues/Fl0GUI/gummi/throne/open)](https://github.com/Fl0GUI/gummi/issues?q=is%3Aopen%20label%3Athrone)
+* [ ] StreamElements+* [![GitHub issues-open](https://badgen.net/github/label-issues/Fl0GUI/gummi/streamelements/open)](https://github.com/Fl0GUI/gummi/issues?q=is%3Aopen%20label%3Astreamelements) 
+* [x] Throne+ [![GitHub issues-open](https://badgen.net/github/label-issues/Fl0GUI/gummi/throne/open)](https://github.com/Fl0GUI/gummi/issues?q=is%3Aopen%20label%3Athrone)
 
 \+ *this integration is implemented with security*
 
@@ -49,6 +49,13 @@ In order for Gummi to work you need to set up a portforward rule on your router.
 To learn how please check with your ISP or search the web.
 Further details (like ports) will be shown during setup when first running Gummi.
 The rest of the setup process is interactive and needs no explanation.
+
+### Security
+
+Some integrations are marked as being secure, but what does this mean?
+The actual implications are integration dependend, but it means that in theory this integration cannot be falsly triggered by a third party.
+In practice it means this is just very very very very unlikely to happen.
+For some integrations an attacker needs to know your public ip adress and a secret value of the store, OR the security is implemented by the store itself.
 
 ## Can't I do this directly in SAMMI?
 Yes, you could.
