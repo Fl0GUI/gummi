@@ -57,12 +57,6 @@ The actual implications are integration dependend, but it means that in theory t
 In practice it means this is just very very very very unlikely to happen.
 For some integrations an attacker needs to know your public ip adress and a secret value of the store, OR the security is implemented by the store itself.
 
-## Can't I do this directly in SAMMI?
-Yes, you could.
-But I've gone through the trouble of finding out how the services work, made your SAMMI implementations simpler, and made the process a bit fun.
-I also just like writing code ok.
-And I didn't find out you could until this was already working well.
-
 #### donate
 
 I'm not requiring payment nor do I depend on donations.
