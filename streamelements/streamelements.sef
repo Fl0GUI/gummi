@@ -52,9 +52,12 @@ Not all of the options send out an event, this is on streamlabs themselves.
 
 [insert_command]
 document.getElementById("SE_form").onsubmit = onSubmit
+tryInsertJWTFromStorage()
+
 [insert_hook]
 [insert_script]
 let streamElements = {}
+const streamElementsStorageKey = "streamelements_gummi_jwt"
 
 function loading() {
   let spinner = document.getElementById("SE_loading")
@@ -66,8 +69,29 @@ function loaded() {
   spinner.classList.add("hidden")
 }
 
+function setJWT(jwt) {
+  document.getElementById("SE_jwt").value = jwt
+}
+
+function getJWT() {
+  return document.getElementById("SE_jwt").value
+}
+
+function tryInsertJWTFromStorage() {
+  if (localStorage.hasOwnProperty[streamElementsStorageKey]) {
+    return 
+  }
+  let stored = localStorage[streamElementsStorageKey]
+  setJWT(stored)
+  setup()
+}
+
 function onSubmit(e) {
   e.preventDefault()
+  setup()
+}
+
+function setup() {
   loading()
   if (streamElements.sock) {
     streamElements.sock.disconnect()
@@ -92,13 +116,17 @@ function onSubmit(e) {
   }
 
   function authenticate() {
-    const jwt = document.getElementById("SE_jwt").value
+    const jwt = getJWT()
     streamElements.sock.emit('authenticate', {method: "jwt", token: jwt})
   }
   function onAuthenticate(data) {
     const label = document.getElementById("SE_jwt_label")
     label.classList.add("connected")
     label.classList.remove("disconnected")
+
+    const jwt = document.getElementById("SE_jwt").value
+    localStorage[streamElementsStorageKey] = jwt
+
     console.log("authenticated to StreamElements")
   }
   function onUnauthorized(data) {
@@ -115,4 +143,5 @@ function onSubmit(e) {
 
   return false
 }
+
 [insert_over]
