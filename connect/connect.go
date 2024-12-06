@@ -9,6 +9,14 @@ import (
 
 func Connect(config *config.Configuration) {
 	wg := sync.WaitGroup{}
+	{
+		wg.Add(1)
+		go func() {
+			log.Println("Heartbeat: starting")
+			connectHeartbeat(config)
+			wg.Done()
+		}()
+	}
 	if config.GumroadConfig.Active {
 		wg.Add(1)
 		go func() {
@@ -34,4 +42,5 @@ func Connect(config *config.Configuration) {
 		}()
 	}
 	wg.Wait()
+	log.Println("Disconnected")
 }

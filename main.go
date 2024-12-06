@@ -9,6 +9,7 @@ import (
 	"j322.ica/gumroad-sammi/fourthwall"
 	"j322.ica/gumroad-sammi/gummi"
 	"j322.ica/gumroad-sammi/gumroad"
+	"j322.ica/gumroad-sammi/heartbeat"
 	"j322.ica/gumroad-sammi/throne"
 	"j322.ica/gumroad-sammi/validate"
 )
@@ -38,6 +39,7 @@ func main() {
 	signal.Notify(signals, os.Interrupt)
 	go func() {
 		<-signals
+		close(heartbeat.Heartbeat)
 		close(gumroad.GetChannel())
 		close(fourthwall.GetSalesChan())
 		throne.Stop()

@@ -19,7 +19,7 @@ func connectFourthwall(c *config.Configuration) {
 		trigger := fourthWallTriggerName(sale)
 		err := backoff(func() error {
 			return bc.Trigger(trigger, sale)
-		}, c)
+		}, &c.Advanced.BackoffTimes)
 		log.Println("Fourthwall sale: received")
 		if err != nil {
 			log.Printf("Fourthwall trigger failure: %s\n", err)

@@ -28,6 +28,9 @@ For gumroad this is just `gumroad`.
 For FourthWall this is `fourthwall:<type>`, where type is `ORDER_PLACED` for example.
 The FourthWall types can be found [on the official documentation](https://docs.fourthwall.dev/webhook-event-types/).
 
+There is also a heartbeat that triggers `gummi:heartbeat`.
+If you want to configure this, edit the config file (see log output at start).
+
 ### Data
 
 The data Gummi forwards is exactly as it's received.

@@ -17,7 +17,7 @@ func connectThrone(c *config.Configuration) {
 	bc := sammi.NewClient(&c.SammiConfig)
 	sales := throne.GetSalesChan()
 	for sale := range sales {
-		err := backoff(func() error { return bc.Trigger("throne", sale) }, c)
+		err := backoff(func() error { return bc.Trigger("throne", sale) }, &c.Advanced.BackoffTimes)
 		if err != nil {
 			log.Printf("Throne trigger failure: %s\n", err)
 		} else {
