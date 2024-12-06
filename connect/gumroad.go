@@ -10,7 +10,7 @@ import (
 
 func connectGumroad(c *config.Configuration) {
 	gc := gumroad.NewClient(c)
-	if err := backoff(gc.Subscribe, c); err != nil {
+	if err := backoff(gc.Subscribe, &c.Advanced.BackoffTimes); err != nil {
 		panic(err)
 	} else {
 		log.Println("Gumroad subscription: success")
@@ -19,7 +19,7 @@ func connectGumroad(c *config.Configuration) {
 	sales := gumroad.GetChannel()
 
 	for sale := range sales {
-		err := backoff(func() error { return bc.Trigger("gumroad", gumroadToVar(sale)) }, c)
+		err := backoff(func() error { return bc.Trigger("gumroad", gumroadToVar(sale)) }, &c.Advanced.BackoffTimes)
 		log.Println("Gumroad sale: received")
 		if err != nil {
 			log.Printf("Gumroad trigger failure: %s\n", err)
@@ -27,7 +27,7 @@ func connectGumroad(c *config.Configuration) {
 			log.Println("Gumroad trigger: success")
 		}
 	}
-	if err := backoff(gc.Unsubscribe, c); err != nil {
+	if err := backoff(gc.Unsubscribe, &c.Advanced.BackoffTimes); err != nil {
 		panic(err)
 	} else {
 		log.Println("Gumroad unsubscription: success")

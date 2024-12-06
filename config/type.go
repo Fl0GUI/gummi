@@ -6,13 +6,14 @@ type Configuration struct {
 	GumroadConfig    GumroadConfig
 	FourthWallConfig FourthWallConfig
 	ThroneConfig     ThroneConfig
+	HeartbeatConfig  BackoffConfig
 }
 
 // Has defaults
 type Advanced struct {
-	ServerConfig    ServerConfig
-	BufferSize      int
-	BackoffAttempts int
+	ServerConfig ServerConfig
+	BufferSize   int
+	BackoffTimes BackoffConfig
 }
 
 type ServerConfig struct {
@@ -39,4 +40,10 @@ type FourthWallConfig struct {
 type ThroneConfig struct {
 	Active    bool
 	CreatorId string
+}
+
+type BackoffConfig struct {
+	Increment int
+	Base      int
+	Max       int
 }

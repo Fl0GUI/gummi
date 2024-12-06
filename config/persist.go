@@ -55,7 +55,7 @@ func (c *Configuration) Save() error {
 }
 
 func load() error {
-	config = &Configuration{Advanced{}, SammiConfig{}, GumroadConfig{}, FourthWallConfig{}, ThroneConfig{}}
+	config = &Configuration{Advanced{}, SammiConfig{}, GumroadConfig{}, FourthWallConfig{}, ThroneConfig{}, BackoffConfig{}}
 
 	config.GumroadConfig.Active = true
 	config.FourthWallConfig.Active = true
@@ -95,6 +95,14 @@ func NewConfig() *Configuration {
 		config.SammiConfig.Port = defaultSammiPort
 	}
 
+	// hearbeat should be steady and not increasing
+	config.HeartbeatConfig.Increment = 0
+	if config.HeartbeatConfig.Base == 0 {
+		config.HeartbeatConfig.Base = defaultHeartbeatBase
+	}
+	// always 0 (means infinite)
+	config.HeartbeatConfig.Max = 0
+
 	if adv.ServerConfig.ServerPort == "" {
 		adv.ServerConfig.ServerPort = defaultServerPort
 	}
@@ -108,8 +116,14 @@ func NewConfig() *Configuration {
 	if adv.BufferSize == 0 {
 		adv.BufferSize = defaultBufferSize
 	}
-	if adv.BackoffAttempts == 0 {
-		adv.BackoffAttempts = defaultBackoffAttempts
+	if adv.BackoffTimes.Increment == 0 {
+		adv.BackoffTimes.Increment = defaultBackoffIncrement
+	}
+	if adv.BackoffTimes.Base == 0 {
+		adv.BackoffTimes.Base = defaultBackoffBase
+	}
+	if adv.BackoffTimes.Max == 0 {
+		adv.BackoffTimes.Max = defaultBackoffMax
 	}
 	return config
 }
