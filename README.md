@@ -43,7 +43,7 @@ For StreamElements see [the official documentation](https://dev.streamelements.c
 
 For Throne see TODO
 
-The web services have ways to simulate events, which is picked up by Gummi as well.
+The web services have ways to simulate events, which are picked up by Gummi as well.
 Use these to test your SAMMI implementation.
 
 ### Requirements
@@ -58,12 +58,12 @@ The rest of the setup process is interactive and needs no explanation.
 Some integrations are marked as being secure, but what does this mean?
 The actual implications are integration dependend, but it means that in theory this integration cannot be falsly triggered by a third party.
 In practice it means this is just very very very very unlikely to happen.
-For some integrations an attacker needs to know your public ip adress and a secret value of the store, OR the security is implemented by the store itself.
+For some integrations to fail security an attacker needs to know your public ip adress and a secret value of the store, OR the security is compromised by the store itself.
 
 #### donate
 
 I'm not requiring payment nor do I depend on donations.
 Kind words motivate me more than money.
-But if that is you way you show your support you can click on this:
+But if that is your way you show your support you can click on this:
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/N4N2XG5FJ)
