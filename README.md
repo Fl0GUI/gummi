@@ -37,7 +37,7 @@ The data Gummi forwards is exactly as it's received.
 
 For gumroad see [the official documentation](https://app.gumroad.com/ping).
 
-For FourthWall see [the official documentation](https://docs.fourthwall.dev/webhook-event-types/).
+For FourthWall see [the official documentation](https://docs.fourthwall.dev/webhooks/webhook-event-types/).
 
 For StreamElements see [the official documentation](https://dev.streamelements.com/docs/api-docs/5a84cc101a9c5-connecting-via-websocket-using-o-auth2#json-schema).
 
